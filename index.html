@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ბავშვების რეესტრი</title>
+<style>
+  :root{
+    --paper:#F7F4EE;
+    --ink:#2B2620;
+    --line:#DCD5C6;
+    --mint:#A8C9B8;
+    --mint-dark:#3F6B54;
+    --alert:#C0533E;
+    --alert-bg:#F7E4DF;
+    --muted:#8A8272;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Georgia","Sylfaen","Noto Serif Georgian",serif;
+    padding:32px 16px 80px;
+  }
+  .wrap{max-width:760px;margin:0 auto;}
+  h1{
+    font-size:28px;
+    font-weight:600;
+    margin:0 0 4px;
+    letter-spacing:0.2px;
+  }
+  .sub{
+    color:var(--muted);
+    font-size:14px;
+    margin:0 0 28px;
+    line-height:1.5;
+  }
+  form{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:32px;
+  }
+  form .full{grid-column:1/-1;}
+  label{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:5px;
+  }
+  input,select{
+    width:100%;
+    padding:9px 10px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:14px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  input:focus,select:focus{
+    outline:2px solid var(--mint-dark);
+    outline-offset:1px;
+  }
+  .row2{display:flex;gap:10px;}
+  .row2 > div{flex:1;}
+  button{
+    grid-column:1/-1;
+    background:var(--mint-dark);
+    color:#fff;
+    border:none;
+    border-radius:6px;
+    padding:11px;
+    font-size:14px;
+    font-family:inherit;
+    cursor:pointer;
+  }
+  button:hover{opacity:0.92;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+  }
+  th,td{
+    text-align:left;
+    padding:11px 12px;
+    font-size:14px;
+    border-bottom:1px solid var(--line);
+  }
+  th{
+    font-size:11px;
+    color:var(--muted);
+    font-weight:600;
+    background:var(--paper);
+  }
+  tr:last-child td{border-bottom:none;}
+  tr.due td{background:var(--alert-bg);}
+  .badge{
+    display:inline-block;
+    padding:2px 9px;
+    border-radius:20px;
+    font-size:12px;
+  }
+  .badge.wait{background:#EDEAE0;color:var(--muted);}
+  .badge.due{background:var(--alert);color:#fff;}
+  .empty{
+    text-align:center;
+    color:var(--muted);
+    padding:30px 10px;
+    font-size:14px;
+  }
+  .del{
+    background:none;
+    border:none;
+    color:var(--muted);
+    cursor:pointer;
+    font-size:13px;
+    padding:0;
+  }
+  .del:hover{color:var(--alert);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>ბავშვების რეესტრი</h1>
+  <p class="sub">შეიყვანეთ ბავშვის მონაცემები — ჩანაწერი ავტომატურად გაწითლდება, როცა ბავშვი 2 წლის გახდება.</p>
+
+  <form id="form">
+    <div>
+      <label>სახელი</label>
+      <input type="text" id="fname" required>
+    </div>
+    <div>
+      <label>გვარი</label>
+      <input type="text" id="lname" required>
+    </div>
+    <div class="full">
+      <label>ტელეფონის ნომერი</label>
+      <input type="tel" id="phone" placeholder="+995 5__ __ __ __" required>
+    </div>
+    <div class="full row2">
+      <div>
+        <label>დაბადების წელი</label>
+        <input type="number" id="byear" placeholder="მაგ. 2024" required>
+      </div>
+      <div>
+        <label>დაბადების თვე</label>
+        <select id="bmonth" required>
+          <option value="1">იანვარი</option>
+          <option value="2">თებერვალი</option>
+          <option value="3">მარტი</option>
+          <option value="4">აპრილი</option>
+          <option value="5">მაისი</option>
+          <option value="6">ივნისი</option>
+          <option value="7">ივლისი</option>
+          <option value="8">აგვისტო</option>
+          <option value="9">სექტემბერი</option>
+          <option value="10">ოქტომბერი</option>
+          <option value="11">ნოემბერი</option>
+          <option value="12">დეკემბერი</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit">დამატება</button>
+  </form>
+
+  <table>
+    <thead>
+      <tr>
+        <th>სახელი გვარი</th>
+        <th>ტელეფონი</th>
+        <th>დაბადება</th>
+        <th>2 წელი შესრულდება</th>
+        <th>სტატუსი</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody">
+      <tr><td colspan="6" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+const MONTHS = ["","იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"];
+let children = [];
+
+function turnsTwoDate(year, month){
+  return new Date(year + 2, month - 1, 1);
+}
+
+function isDue(year, month){
+  const target = turnsTwoDate(year, month);
+  const now = new Date();
+  return now >= target;
+}
+
+function render(){
+  const tbody = document.getElementById('tbody');
+  if(children.length === 0){
+    tbody.innerHTML = '<tr><td colspan="6" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>';
+    return;
+  }
+  tbody.innerHTML = children.map((c, i) => {
+    const due = isDue(c.byear, c.bmonth);
+    const target = turnsTwoDate(c.byear, c.bmonth);
+    const targetLabel = MONTHS[target.getMonth()+1] + " " + target.getFullYear();
+    return `<tr class="${due ? 'due' : ''}">
+      <td>${escapeHtml(c.fname)} ${escapeHtml(c.lname)}</td>
+      <td>${escapeHtml(c.phone)}</td>
+      <td>${MONTHS[c.bmonth]} ${c.byear}</td>
+      <td>${targetLabel}</td>
+      <td><span class="badge ${due ? 'due' : 'wait'}">${due ? '2 წელი შესრულდა' : 'ჯერ არ არის 2 წლის'}</span></td>
+      <td><button class="del" onclick="removeChild(${i})">წაშლა</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+function removeChild(i){
+  children.splice(i, 1);
+  render();
+}
+
+document.getElementById('form').addEventListener('submit', function(e){
+  e.preventDefault();
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  const byear = parseInt(document.getElementById('byear').value, 10);
+  const bmonth = parseInt(document.getElementById('bmonth').value, 10);
+  if(!fname || !lname || !phone || !byear) return;
+  children.push({fname, lname, phone, byear, bmonth});
+  this.reset();
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

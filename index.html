@@ -120,6 +120,16 @@
 
   .wrap{max-width:960px;margin:0 auto;padding:28px 16px 80px;}
   .sub-text{color:var(--muted);font-size:14px;margin:0 0 24px;line-height:1.5;}
+  #storageWarning{
+    display:none;
+    background:var(--orange-bg);
+    color:var(--orange);
+    border:1px solid var(--orange);
+    border-radius:8px;
+    padding:10px 14px;
+    font-size:13px;
+    margin-bottom:20px;
+  }
 
   form{
     background:#fff;
@@ -214,7 +224,6 @@
     padding:5px 10px;
   }
   .del:hover{background:var(--red);}
-  .count-note{font-size:12px;color:var(--muted);margin:-14px 0 18px;}
 </style>
 </head>
 <body>
@@ -248,6 +257,7 @@
   </header>
 
   <div class="wrap">
+    <div id="storageWarning">⚠ ვერ ხერხდება მონაცემების მუდმივი შენახვა ამ ბრაუზერში — ცვლილებები ჩანს, მაგრამ გვერდის დახურვის შემდეგ შეიძლება დაიკარგოს.</div>
     <p class="sub-text">შეავსეთ ბავშვის მონაცემები. ჩანაწერები მუდმივად ინახება ამ ბრაუზერში და არ იშლება გვერდის განახლებისას — მხოლოდ შენ თვითონ, ხელით, შეგიძლია წაშალო.</p>
 
     <form id="form">
@@ -353,14 +363,28 @@ function logout(){
 /* ---------- PERSISTENT STORAGE ---------- */
 const STORAGE_KEY = "children_registry_data";
 let children = [];
+let storageOk = true;
 
 function saveChildren(){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(children));
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(children));
+    storageOk = true;
+    document.getElementById('storageWarning').style.display = 'none';
+  }catch(err){
+    storageOk = false;
+    document.getElementById('storageWarning').style.display = 'block';
+    console.error('შენახვის შეცდომა:', err);
+  }
 }
 
 function loadChildren(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  children = raw ? JSON.parse(raw) : [];
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    children = raw ? JSON.parse(raw) : [];
+  }catch(err){
+    children = [];
+    console.error('ჩატვირთვის შეცდომა:', err);
+  }
 }
 
 /* ---------- APP LOGIC ---------- */
@@ -406,9 +430,17 @@ function render(){
       <td>${targetLabel}</td>
       <td>${st.remaining}</td>
       <td><span class="badge ${st.level}">${st.label}</span></td>
-      <td><button class="del" onclick="removeChild(${i})">წაშლა</button></td>
+      <td><button type="button" class="del" data-index="${i}">წაშლა</button></td>
     </tr>`;
   }).join('');
+
+  // ღილაკებზე event-ების დამატება (inline onclick-ის ნაცვლად, უფრო საიმედოა)
+  tbody.querySelectorAll('.del').forEach(btn => {
+    btn.addEventListener('click', function(){
+      const idx = parseInt(this.getAttribute('data-index'), 10);
+      removeChild(idx);
+    });
+  });
 }
 
 function escapeHtml(str){
@@ -419,8 +451,8 @@ function escapeHtml(str){
 
 function removeChild(i){
   children.splice(i, 1);
-  saveChildren();
-  render();
+  render();       // ჯერ ეკრანი განახლდება დაუყოვნებლივ
+  saveChildren();  // მერე ხდება შენახვის მცდელობა
 }
 
 document.getElementById('form').addEventListener('submit', function(e){
@@ -441,13 +473,12 @@ document.getElementById('form').addEventListener('submit', function(e){
 
   if(!fname || !lname || !phone || !byear) return;
   children.push({fname, lname, pid, phone, byear, bmonth});
-  saveChildren();
   this.reset();
   render();
+  saveChildren();
 });
 
 /* ---------- LIVE REFRESH ---------- */
-// ავტომატურად ანახლებს სტატუსებს (ფერებს, დარჩენილ დროს) ყოველ წუთში, ხელით გახსნის გარეშეც
 setInterval(render, 60000);
 </script>
 </body>

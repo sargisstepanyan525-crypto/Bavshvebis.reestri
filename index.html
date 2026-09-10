@@ -3,17 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ბავშვების რეესტრი</title>
+<title>ბავშვების რეესტრი — დაცული სისტემა</title>
 <style>
   :root{
-    --paper:#F7F4EE;
-    --ink:#2B2620;
-    --line:#DCD5C6;
-    --mint:#A8C9B8;
-    --mint-dark:#3F6B54;
-    --alert:#C0533E;
-    --alert-bg:#F7E4DF;
-    --muted:#8A8272;
+    --navy:#1B2A4A;
+    --navy-dark:#101B33;
+    --gold:#B8944F;
+    --paper:#F5F3EE;
+    --ink:#20242E;
+    --line:#D8D3C6;
+    --muted:#767267;
+    --green:#3F6B4E;
+    --green-bg:#E4EEE6;
+    --yellow:#8A6D1E;
+    --yellow-bg:#F5EBCF;
+    --orange:#A05A22;
+    --orange-bg:#F5E2CE;
+    --red:#A5372B;
+    --red-bg:#F5DDD8;
   }
   *{box-sizing:border-box;}
   body{
@@ -21,38 +28,140 @@
     background:var(--paper);
     color:var(--ink);
     font-family:"Georgia","Sylfaen","Noto Serif Georgian",serif;
-    padding:32px 16px 80px;
   }
-  .wrap{max-width:760px;margin:0 auto;}
-  h1{
-    font-size:28px;
-    font-weight:600;
+
+  /* ---------- LOGIN SCREEN ---------- */
+  #loginScreen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(180deg,var(--navy) 0%,var(--navy-dark) 100%);
+    padding:20px;
+  }
+  .login-card{
+    background:var(--paper);
+    border-radius:10px;
+    padding:36px 32px;
+    width:100%;
+    max-width:360px;
+    box-shadow:0 10px 40px rgba(0,0,0,0.35);
+  }
+  .login-badge{
+    width:44px;height:44px;
+    border-radius:50%;
+    background:var(--navy);
+    color:var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;font-weight:700;
+    margin:0 auto 16px;
+  }
+  .login-card h2{
+    text-align:center;
     margin:0 0 4px;
-    letter-spacing:0.2px;
+    font-size:20px;
   }
-  .sub{
+  .login-card p.hint{
+    text-align:center;
     color:var(--muted);
-    font-size:14px;
-    margin:0 0 28px;
-    line-height:1.5;
+    font-size:13px;
+    margin:0 0 24px;
   }
+  .login-card label{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:5px;
+  }
+  .login-card input{
+    width:100%;
+    padding:10px 11px;
+    border:1px solid var(--line);
+    border-radius:6px;
+    font-family:inherit;
+    font-size:14px;
+    margin-bottom:14px;
+    background:#fff;
+  }
+  .login-card button{
+    width:100%;
+    background:var(--navy);
+    color:var(--gold);
+    border:none;
+    border-radius:6px;
+    padding:12px;
+    font-size:14px;
+    font-family:inherit;
+    cursor:pointer;
+    letter-spacing:0.3px;
+  }
+  .login-card button:hover{background:var(--navy-dark);}
+  #loginError{
+    color:var(--red);
+    font-size:13px;
+    text-align:center;
+    margin:-6px 0 14px;
+    display:none;
+  }
+
+  /* ---------- MAIN APP ---------- */
+  #app{display:none;}
+  header{
+    background:var(--navy);
+    color:#fff;
+    padding:20px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  header .title{display:flex;align-items:center;gap:12px;}
+  header .seal{
+    width:34px;height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--gold);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--gold);
+    font-size:14px;font-weight:700;
+  }
+  header h1{font-size:19px;margin:0;font-weight:600;}
+  header .sub{font-size:11px;color:#B9C2D6;margin-top:2px;}
+  header button{
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold);
+    padding:7px 14px;
+    border-radius:6px;
+    font-family:inherit;
+    font-size:12px;
+    cursor:pointer;
+  }
+  header button:hover{background:rgba(184,148,79,0.15);}
+
+  .wrap{max-width:920px;margin:0 auto;padding:28px 16px 80px;}
+  .sub-text{color:var(--muted);font-size:14px;margin:0 0 24px;line-height:1.5;}
+
   form{
     background:#fff;
     border:1px solid var(--line);
     border-radius:10px;
-    padding:20px;
+    padding:22px;
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:14px;
     margin-bottom:32px;
   }
   form .full{grid-column:1/-1;}
-  label{
-    display:block;
+  form legend{
+    grid-column:1/-1;
     font-size:12px;
-    color:var(--muted);
-    margin-bottom:5px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    border-bottom:1px solid var(--line);
+    padding-bottom:8px;
+    margin-bottom:4px;
   }
+  label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;}
   input,select{
     width:100%;
     padding:9px 10px;
@@ -63,24 +172,28 @@
     background:var(--paper);
     color:var(--ink);
   }
-  input:focus,select:focus{
-    outline:2px solid var(--mint-dark);
-    outline-offset:1px;
-  }
+  input:focus,select:focus{outline:2px solid var(--navy);outline-offset:1px;}
   .row2{display:flex;gap:10px;}
   .row2 > div{flex:1;}
-  button{
+  .err-text{color:var(--red);font-size:11px;margin-top:3px;display:none;}
+  form button[type=submit]{
     grid-column:1/-1;
-    background:var(--mint-dark);
-    color:#fff;
+    background:var(--navy);
+    color:var(--gold);
     border:none;
     border-radius:6px;
-    padding:11px;
+    padding:12px;
     font-size:14px;
     font-family:inherit;
     cursor:pointer;
+    letter-spacing:0.3px;
   }
-  button:hover{opacity:0.92;}
+  form button[type=submit]:hover{background:var(--navy-dark);}
+
+  .legend-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-size:12px;color:var(--muted);}
+  .legend-row span{display:inline-flex;align-items:center;gap:6px;}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+
   table{
     width:100%;
     border-collapse:collapse;
@@ -89,107 +202,158 @@
     border-radius:10px;
     overflow:hidden;
   }
-  th,td{
-    text-align:left;
-    padding:11px 12px;
-    font-size:14px;
-    border-bottom:1px solid var(--line);
-  }
-  th{
-    font-size:11px;
-    color:var(--muted);
-    font-weight:600;
-    background:var(--paper);
-  }
+  th,td{text-align:left;padding:11px 12px;font-size:13.5px;border-bottom:1px solid var(--line);}
+  th{font-size:11px;color:var(--muted);font-weight:600;background:var(--paper);}
   tr:last-child td{border-bottom:none;}
-  tr.due td{background:var(--alert-bg);}
-  .badge{
-    display:inline-block;
-    padding:2px 9px;
-    border-radius:20px;
-    font-size:12px;
-  }
-  .badge.wait{background:#EDEAE0;color:var(--muted);}
-  .badge.due{background:var(--alert);color:#fff;}
-  .empty{
-    text-align:center;
-    color:var(--muted);
-    padding:30px 10px;
-    font-size:14px;
-  }
-  .del{
-    background:none;
-    border:none;
-    color:var(--muted);
-    cursor:pointer;
-    font-size:13px;
-    padding:0;
-  }
-  .del:hover{color:var(--alert);}
+
+  tr.st-green td{background:var(--green-bg);}
+  tr.st-yellow td{background:var(--yellow-bg);}
+  tr.st-orange td{background:var(--orange-bg);}
+  tr.st-red td{background:var(--red-bg);}
+
+  .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;}
+  .badge.green{background:var(--green);color:#fff;}
+  .badge.yellow{background:var(--yellow);color:#fff;}
+  .badge.orange{background:var(--orange);color:#fff;}
+  .badge.red{background:var(--red);color:#fff;}
+
+  .empty{text-align:center;color:var(--muted);padding:30px 10px;font-size:14px;}
+  .del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12.5px;padding:0;}
+  .del:hover{color:var(--red);}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>ბავშვების რეესტრი</h1>
-  <p class="sub">შეიყვანეთ ბავშვის მონაცემები — ჩანაწერი ავტომატურად გაწითლდება, როცა ბავშვი 2 წლის გახდება.</p>
 
-  <form id="form">
-    <div>
-      <label>სახელი</label>
-      <input type="text" id="fname" required>
-    </div>
-    <div>
-      <label>გვარი</label>
-      <input type="text" id="lname" required>
-    </div>
-    <div class="full">
-      <label>ტელეფონის ნომერი</label>
-      <input type="tel" id="phone" placeholder="+995 5__ __ __ __" required>
-    </div>
-    <div class="full row2">
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-badge">დ</div>
+    <h2>დაცული სისტემა</h2>
+    <p class="hint">გთხოვთ გაიაროთ ავტორიზაცია</p>
+    <div id="loginError">არასწორი სახელი ან პაროლი</div>
+    <label>მომხმარებლის სახელი</label>
+    <input type="text" id="loginUser" autocomplete="off">
+    <label>პაროლი</label>
+    <input type="password" id="loginPass">
+    <button onclick="tryLogin()">შესვლა</button>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <header>
+    <div class="title">
+      <div class="seal">დ</div>
       <div>
-        <label>დაბადების წელი</label>
-        <input type="number" id="byear" placeholder="მაგ. 2024" required>
-      </div>
-      <div>
-        <label>დაბადების თვე</label>
-        <select id="bmonth" required>
-          <option value="1">იანვარი</option>
-          <option value="2">თებერვალი</option>
-          <option value="3">მარტი</option>
-          <option value="4">აპრილი</option>
-          <option value="5">მაისი</option>
-          <option value="6">ივნისი</option>
-          <option value="7">ივლისი</option>
-          <option value="8">აგვისტო</option>
-          <option value="9">სექტემბერი</option>
-          <option value="10">ოქტომბერი</option>
-          <option value="11">ნოემბერი</option>
-          <option value="12">დეკემბერი</option>
-        </select>
+        <h1>ბავშვების რეესტრი</h1>
+        <div class="sub">დაცული სისტემა — 2 წლის ასაკის მონიტორინგი</div>
       </div>
     </div>
-    <button type="submit">დამატება</button>
-  </form>
+    <button onclick="logout()">გასვლა</button>
+  </header>
 
-  <table>
-    <thead>
-      <tr>
-        <th>სახელი გვარი</th>
-        <th>ტელეფონი</th>
-        <th>დაბადება</th>
-        <th>2 წელი შესრულდება</th>
-        <th>სტატუსი</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody id="tbody">
-      <tr><td colspan="6" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>
-    </tbody>
-  </table>
+  <div class="wrap">
+    <p class="sub-text">შეავსეთ ბავშვის მონაცემები. ჩანაწერის ფერი ავტომატურად იცვლება იმის მიხედვით, რამდენი დრო რჩება 2 წლის ასაკამდე.</p>
+
+    <form id="form">
+      <legend>ახალი ჩანაწერი</legend>
+      <div>
+        <label>სახელი</label>
+        <input type="text" id="fname" required>
+      </div>
+      <div>
+        <label>გვარი</label>
+        <input type="text" id="lname" required>
+      </div>
+      <div>
+        <label>პირადი ნომერი</label>
+        <input type="text" id="pid" maxlength="11" placeholder="11 ციფრი" required>
+        <div class="err-text" id="pidErr">პირადი ნომერი უნდა შედგებოდეს 11 ციფრისგან</div>
+      </div>
+      <div>
+        <label>ტელეფონის ნომერი</label>
+        <input type="tel" id="phone" placeholder="+995 5__ __ __ __" required>
+      </div>
+      <div class="full row2">
+        <div>
+          <label>დაბადების წელი</label>
+          <input type="number" id="byear" placeholder="მაგ. 2024" required>
+        </div>
+        <div>
+          <label>დაბადების თვე</label>
+          <select id="bmonth" required>
+            <option value="1">იანვარი</option>
+            <option value="2">თებერვალი</option>
+            <option value="3">მარტი</option>
+            <option value="4">აპრილი</option>
+            <option value="5">მაისი</option>
+            <option value="6">ივნისი</option>
+            <option value="7">ივლისი</option>
+            <option value="8">აგვისტო</option>
+            <option value="9">სექტემბერი</option>
+            <option value="10">ოქტომბერი</option>
+            <option value="11">ნოემბერი</option>
+            <option value="12">დეკემბერი</option>
+          </select>
+        </div>
+      </div>
+      <button type="submit">დამატება</button>
+    </form>
+
+    <div class="legend-row">
+      <span><span class="dot" style="background:var(--green)"></span>3 თვეზე მეტი დარჩა</span>
+      <span><span class="dot" style="background:var(--yellow)"></span>1–3 თვე დარჩა</span>
+      <span><span class="dot" style="background:var(--orange)"></span>30 დღეზე ნაკლები დარჩა</span>
+      <span><span class="dot" style="background:var(--red)"></span>2 წელი უკვე შესრულდა</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>სახელი გვარი</th>
+          <th>პირადი ნომერი</th>
+          <th>ტელეფონი</th>
+          <th>დაბადება</th>
+          <th>2 წელი — თარიღი</th>
+          <th>დარჩენილი დრო</th>
+          <th>სტატუსი</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+        <tr><td colspan="8" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script>
+/* ---------- AUTH ---------- */
+const VALID_USER = "SAQO2003";
+const VALID_PASS = "2003Saqo2003";
+
+function tryLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  if(u === VALID_USER && p === VALID_PASS){
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    document.getElementById('loginError').style.display = 'none';
+  } else {
+    document.getElementById('loginError').style.display = 'block';
+  }
+}
+document.getElementById('loginPass').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') tryLogin();
+});
+function logout(){
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginUser').value = '';
+  document.getElementById('loginPass').value = '';
+}
+
+/* ---------- APP LOGIC ---------- */
 const MONTHS = ["","იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"];
 let children = [];
 
@@ -197,28 +361,42 @@ function turnsTwoDate(year, month){
   return new Date(year + 2, month - 1, 1);
 }
 
-function isDue(year, month){
+function timeStatus(year, month){
   const target = turnsTwoDate(year, month);
   const now = new Date();
-  return now >= target;
+  const diffMs = target - now;
+  const diffDays = Math.ceil(diffMs / 86400000);
+
+  if(diffDays <= 0){
+    return {level:'red', label:'2 წელი შესრულდა', remaining: Math.abs(diffDays) + ' დღის წინ'};
+  }
+  const months = Math.floor(diffDays / 30);
+  const days = diffDays % 30;
+  const remainingText = (months > 0 ? months + ' თვე ' : '') + days + ' დღე';
+
+  if(diffDays <= 30) return {level:'orange', label:'მალე ივსება', remaining: remainingText};
+  if(diffDays <= 90) return {level:'yellow', label:'ახლოვდება', remaining: remainingText};
+  return {level:'green', label:'დროა საკმარისი', remaining: remainingText};
 }
 
 function render(){
   const tbody = document.getElementById('tbody');
   if(children.length === 0){
-    tbody.innerHTML = '<tr><td colspan="6" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="empty">ჯერ არცერთი ჩანაწერი არ არის დამატებული</td></tr>';
     return;
   }
   tbody.innerHTML = children.map((c, i) => {
-    const due = isDue(c.byear, c.bmonth);
+    const st = timeStatus(c.byear, c.bmonth);
     const target = turnsTwoDate(c.byear, c.bmonth);
     const targetLabel = MONTHS[target.getMonth()+1] + " " + target.getFullYear();
-    return `<tr class="${due ? 'due' : ''}">
+    return `<tr class="st-${st.level}">
       <td>${escapeHtml(c.fname)} ${escapeHtml(c.lname)}</td>
+      <td>${escapeHtml(c.pid)}</td>
       <td>${escapeHtml(c.phone)}</td>
       <td>${MONTHS[c.bmonth]} ${c.byear}</td>
       <td>${targetLabel}</td>
-      <td><span class="badge ${due ? 'due' : 'wait'}">${due ? '2 წელი შესრულდა' : 'ჯერ არ არის 2 წლის'}</span></td>
+      <td>${st.remaining}</td>
+      <td><span class="badge ${st.level}">${st.label}</span></td>
       <td><button class="del" onclick="removeChild(${i})">წაშლა</button></td>
     </tr>`;
   }).join('');
@@ -239,11 +417,20 @@ document.getElementById('form').addEventListener('submit', function(e){
   e.preventDefault();
   const fname = document.getElementById('fname').value.trim();
   const lname = document.getElementById('lname').value.trim();
+  const pid = document.getElementById('pid').value.trim();
   const phone = document.getElementById('phone').value.trim();
   const byear = parseInt(document.getElementById('byear').value, 10);
   const bmonth = parseInt(document.getElementById('bmonth').value, 10);
+
+  const pidErr = document.getElementById('pidErr');
+  if(!/^\d{11}$/.test(pid)){
+    pidErr.style.display = 'block';
+    return;
+  }
+  pidErr.style.display = 'none';
+
   if(!fname || !lname || !phone || !byear) return;
-  children.push({fname, lname, phone, byear, bmonth});
+  children.push({fname, lname, pid, phone, byear, bmonth});
   this.reset();
   render();
 });
